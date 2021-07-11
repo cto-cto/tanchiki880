@@ -35,6 +35,9 @@ class Game:
                         self.player.go_up()
                     elif event.key == pygame.K_DOWN:
                         self.player.go_down()
+                    elif event.key == pygame.K_SPACE:
+                        bullet = self.player.shoot()
+                        self.all_sprite_list.add(bullet)
 
                 elif event.type == pygame.KEYUP:
                     if event.key in [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN]:
