@@ -131,8 +131,9 @@ class TextureMove(Texture):
 
     def update(self):
         x, y = pygame.mouse.get_pos()
-        self.rect.x = x
-        self.rect.y = y
+        w, h = self.rect.size
+        self.rect.x = x - w/2
+        self.rect.y = y - h/2
 
     def change_img(self, img_name):
         self.img_name = img_name

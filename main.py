@@ -1,5 +1,7 @@
+import json
+from collections import defaultdict
 import pygame
-from objects import Player, TextureMove
+from objects import Player, TextureMove, Texture
 from constants import WIDTH, HEIGHT, BLACK, FPS
 
 
@@ -7,31 +9,62 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode([WIDTH, HEIGHT])
+        self.bg = pygame.image.load('bg.png')
         pygame.display.set_caption('Platformer')
         # Создаем спрайт игрока
         self.player = Player(200, 200)
-        self.texture = TextureMove(0,0, 'brickf')
+        self.texture = TextureMove(0, 0, 'brickf')
         # создаем группу для всех спрайтов в игре
-        self.all_sprite_list = pygame.sprite.Group()
-        self.all_sprite_list.add(self.player)
-        self.all_sprite_list.add(self.texture)
+        self.sprite_list = pygame.sprite.Group()
+        self.sprite_list.add(self.player)
+        self.sprite_list.add(self.texture)
         self.clock = pygame.time.Clock()
+        self.load_map()
 
     def draw(self):
-        self.screen.fill(BLACK)
-        self.all_sprite_list.draw(self.screen)
+        # self.screen.fill(BLACK)
+        self.screen.blit(self.bg, (0, 0))
+        self.sprite_list.draw(self.screen)
+
+    def add_texture(self, dict):
+        for k, v in dict.items():
+            self.img_name = k
+            for i in v:
+                self.sprite_list.add(Texture(i[0], i[1], k))
+
+    def delete_texture(self):
+        for t in self.sprite_list.sprites()[2:]:
+            x, y = pygame.mouse.get_pos()
+            w, h = t.rect.size
+            if t.rect.x < x < t.rect.x + w and t.rect.y < y < t.rect.y + h:
+                t.kill()
+
+    def load_map(self):
+        with open('map.json', 'r') as f:
+            data = json.load(f)
+        for key in data:
+            for coords in data[key]:
+                texture = Texture(*coords, key)
+                self.sprite_list.add(texture)
 
     def run(self):
         done = False
+        map = defaultdict(list)
         while not done:
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    with open('map.json', 'w') as f:
+                        json.dump(map, f)
                     done = True
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    texture = self.texture.place()
-                    self.all_sprite_list.add(texture)
+                    if event.button == 1:
+                        texture = self.texture.place()
+                        self.sprite_list.add(texture)
+                        map[self.texture.img_name].append(
+                            (self.texture.rect.x, self.texture.rect.y))
+                    if event.button == 3:
+                        self.delete_texture()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
@@ -47,14 +80,14 @@ class Game:
                     elif event.key == pygame.K_SPACE:
                         bullet = self.player.shoot()
                         if bullet:
-                            self.all_sprite_list.add(bullet)
+                            self.sprite_list.add(bullet)
 
                 elif event.type == pygame.KEYUP:
                     if event.key in [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN]:
                         self.player.stop()
 
             self.draw()
-            self.all_sprite_list.update()
+            self.sprite_list.update()
             pygame.display.flip()
             self.clock.tick(FPS)
         pygame.quit()
