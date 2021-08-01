@@ -19,7 +19,6 @@ class Game:
         self.sprite_list.add(self.player)
         self.sprite_list.add(self.texture)
         self.clock = pygame.time.Clock()
-        self.map = self.load_map()
 
     def draw(self):
         self.screen.blit(self.bg, (0, 0))
@@ -47,7 +46,7 @@ class Game:
 
     def run(self):
         done = False
-        map = defaultdict(list, self.map)
+        map = defaultdict(list, self.load_map())
         while not done:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -95,8 +94,3 @@ game = Game()
 game.run()
 
 
-# def add_texture(self, dict):
-#     for k, v in dict.items():
-#         self.img_name = k
-#         for i in v:
-#             self.sprite_list.add(Texture(i[0], i[1], k))
