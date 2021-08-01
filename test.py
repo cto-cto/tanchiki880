@@ -1,7 +1,4 @@
 from collections import defaultdict
-
-d = defaultdict(list)
-d = {}
-d['hi'] = []
-d['hi'].append(2)
-print(d)
+d = {'k': [5,6]}
+d2 = defaultdict(list, {})
+print(d2)

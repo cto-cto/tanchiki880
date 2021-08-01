@@ -19,7 +19,7 @@ class Game:
         self.sprite_list.add(self.player)
         self.sprite_list.add(self.texture)
         self.clock = pygame.time.Clock()
-        self.load_map()
+        self.map = self.load_map()
 
     def draw(self):
         self.screen.blit(self.bg, (0, 0))
@@ -43,10 +43,11 @@ class Game:
             for coords in data[key]:
                 texture = Texture(*coords, key)
                 self.sprite_list.add(texture)
+        return data
 
     def run(self):
         done = False
-        map = defaultdict(list)
+        map = defaultdict(list, self.map)
         while not done:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
