@@ -16,6 +16,7 @@ class Game:
         self.texture = TextureMove(0, 0, 'brickf')
         # создаем группу для всех спрайтов в игре
         self.sprite_list = pygame.sprite.Group()
+        self.texture_lst = pygame.sprite.Group()
         self.sprite_list.add(self.player)
         self.sprite_list.add(self.texture)
         self.clock = pygame.time.Clock()
@@ -23,9 +24,10 @@ class Game:
     def draw(self):
         self.screen.blit(self.bg, (0, 0))
         self.sprite_list.draw(self.screen)
+        self.texture_lst.draw(self.screen)
 
     def delete_texture(self, map):
-        for t in self.sprite_list.sprites()[2:]:
+        for t in self.texture_lst.sprites():
             x, y = pygame.mouse.get_pos()
             w, h = t.rect.size
             if t.rect.x < x < t.rect.x + w and t.rect.y < y < t.rect.y + h:
@@ -41,7 +43,7 @@ class Game:
         for key in data:
             for coords in data[key]:
                 texture = Texture(*coords, key)
-                self.sprite_list.add(texture)
+                self.texture_lst.add(texture)
         return data
 
     def run(self):
@@ -57,7 +59,7 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         texture = self.texture.place()
-                        self.sprite_list.add(texture)
+                        self.texture_lst.add(texture)
                         map[self.texture.img_name].append(
                             (self.texture.rect.x, self.texture.rect.y))
                     if event.button == 3:
@@ -85,6 +87,7 @@ class Game:
 
             self.draw()
             self.sprite_list.update()
+            self.texture_lst.update()
             pygame.display.flip()
             self.clock.tick(FPS)
         pygame.quit()
