@@ -2,7 +2,7 @@ import json
 from collections import defaultdict
 import pygame
 from objects import Player, TextureMove, Texture
-from constants import WIDTH, HEIGHT, BLACK, FPS
+from constants import WIDTH, HEIGHT, FPS
 
 
 class Game:
@@ -22,22 +22,19 @@ class Game:
         self.load_map()
 
     def draw(self):
-        # self.screen.fill(BLACK)
         self.screen.blit(self.bg, (0, 0))
         self.sprite_list.draw(self.screen)
 
-    def add_texture(self, dict):
-        for k, v in dict.items():
-            self.img_name = k
-            for i in v:
-                self.sprite_list.add(Texture(i[0], i[1], k))
-
-    def delete_texture(self):
+    def delete_texture(self, map):
         for t in self.sprite_list.sprites()[2:]:
             x, y = pygame.mouse.get_pos()
             w, h = t.rect.size
             if t.rect.x < x < t.rect.x + w and t.rect.y < y < t.rect.y + h:
                 t.kill()
+                for key in map:
+                    for coord in map[key]:
+                        if coord[0] == t.rect.x and coord[1] == t.rect.y:
+                            map[key].pop(map[key].index(coord))
 
     def load_map(self):
         with open('map.json', 'r') as f:
@@ -64,7 +61,7 @@ class Game:
                         map[self.texture.img_name].append(
                             (self.texture.rect.x, self.texture.rect.y))
                     if event.button == 3:
-                        self.delete_texture()
+                        self.delete_texture(map)
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
@@ -95,3 +92,10 @@ class Game:
 
 game = Game()
 game.run()
+
+
+# def add_texture(self, dict):
+#     for k, v in dict.items():
+#         self.img_name = k
+#         for i in v:
+#             self.sprite_list.add(Texture(i[0], i[1], k))
