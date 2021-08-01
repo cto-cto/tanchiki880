@@ -16,6 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.cooldown = 0
+        self.textures = pygame.sprite.Group()
 
     def _load_img(self, path):
         self.image_u = pygame.image.load(path)
@@ -33,6 +34,18 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.change_x
         self.rect.y += self.change_y
+
+        sprite = pygame.sprite.spritecollideany(self, self.textures, None)
+        if sprite:
+            if self.direction == 'U':
+                self.rect.y = sprite.rect.y + sprite.rect.height + 3
+            if self.direction == 'D':
+                self.rect.y = sprite.rect.y - sprite.rect.height - 3
+            if self.direction == 'R':
+                self.rect.x = sprite.rect.x - sprite.rect.width - 3
+            if self.direction == 'L':
+                self.rect.x = sprite.rect.x + sprite.rect.width + 3
+
         self.image = self.direct_dict[self.direction]
         if self.cooldown > 0:
             self.cooldown -= 1

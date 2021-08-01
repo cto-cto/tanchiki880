@@ -19,6 +19,7 @@ class Game:
         self.texture_lst = pygame.sprite.Group()
         self.sprite_list.add(self.player)
         self.sprite_list.add(self.texture)
+        self.player.textures = self.texture_lst
         self.clock = pygame.time.Clock()
 
     def draw(self):
