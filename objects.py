@@ -1,5 +1,6 @@
 import os
 import pygame
+from constants import HEIGHT, WIDTH
 
 
 class Player(pygame.sprite.Sprite):
@@ -10,6 +11,7 @@ class Player(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
         self._load_img('assets/tank_gold1.png')
+        self.shot_sound = pygame.mixer.Sound('assets/shot.mp3')
         self.direction = 'U'
         self.image = self.image_u
         self.rect = self.image.get_rect()
@@ -76,6 +78,7 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         if self.cooldown == 0:
+            self.shot_sound.play()
             self.cooldown = 30
             if self.direction == 'R':
                 return Bullet(self.rect.x+65, self.rect.y+31, self.direction)
@@ -125,6 +128,9 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.change_x
         self.rect.y += self.change_y
+        if not (0 < self.rect.x < WIDTH and 0 < self.rect.y < HEIGHT):
+            self.kill()
+
 
 
 class Texture(pygame.sprite.Sprite):

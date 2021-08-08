@@ -17,6 +17,7 @@ class Game:
         # создаем группу для всех спрайтов в игре
         self.sprite_list = pygame.sprite.Group()
         self.texture_lst = pygame.sprite.Group()
+        self.bullets_lst = pygame.sprite.Group()
         self.sprite_list.add(self.player)
         self.sprite_list.add(self.texture)
         self.player.textures = self.texture_lst
@@ -26,6 +27,7 @@ class Game:
         self.screen.blit(self.bg, (0, 0))
         self.sprite_list.draw(self.screen)
         self.texture_lst.draw(self.screen)
+        self.bullets_lst.draw(self.screen)
 
     def delete_texture(self, map):
         for t in self.texture_lst.sprites():
@@ -80,13 +82,15 @@ class Game:
                     elif event.key == pygame.K_SPACE:
                         bullet = self.player.shoot()
                         if bullet:
-                            self.sprite_list.add(bullet)
+                            self.bullets_lst.add(bullet)
 
                 elif event.type == pygame.KEYUP:
                     if event.key in [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN]:
                         self.player.stop()
 
             self.draw()
+            print(self.bullets_lst.sprites())
+            self.bullets_lst.update()
             self.sprite_list.update()
             self.texture_lst.update()
             pygame.display.flip()
