@@ -89,10 +89,10 @@ class Game:
                         self.player.stop()
 
             self.draw()
-            print(self.bullets_lst.sprites())
             self.bullets_lst.update()
             self.sprite_list.update()
             self.texture_lst.update()
+            pygame.sprite.groupcollide(self.bullets_lst, self.texture_lst, True, True)
             pygame.display.flip()
             self.clock.tick(FPS)
         pygame.quit()
