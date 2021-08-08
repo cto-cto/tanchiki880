@@ -8,6 +8,6 @@ WHITE = (255, 255, 255)
 LIGHTBLUE = (220,   240, 255)
 
 # Характеристики приложения
-WIDTH = 700
-HEIGHT = 400
+WIDTH = 1000
+HEIGHT = 800
 FPS = 30

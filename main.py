@@ -9,7 +9,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode([WIDTH, HEIGHT])
-        self.bg = pygame.image.load('bg.png')
+        self.bg = pygame.image.load('bg2.jpg')
         pygame.display.set_caption('Platformer')
         # Создаем спрайт игрока
         self.player = Player(200, 200)

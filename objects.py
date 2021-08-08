@@ -25,7 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.image_d = pygame.transform.flip(self.image_u, False, True)
 
         self.direct_dict = {
-            'R':  self.image_r,
+            'R': self.image_r,
             'L': self.image_l,
             'D': self.image_d,
             'U': self.image_u,
@@ -38,13 +38,13 @@ class Player(pygame.sprite.Sprite):
         sprite = pygame.sprite.spritecollideany(self, self.textures, None)
         if sprite:
             if self.direction == 'U':
-                self.rect.y = sprite.rect.y + sprite.rect.height + 3
-            if self.direction == 'D':
-                self.rect.y = sprite.rect.y - sprite.rect.height - 3
-            if self.direction == 'R':
-                self.rect.x = sprite.rect.x - sprite.rect.width - 3
-            if self.direction == 'L':
-                self.rect.x = sprite.rect.x + sprite.rect.width + 3
+                self.rect.top = sprite.rect.bottom
+            elif self.direction == 'D':
+                self.rect.bottom = sprite.rect.top
+            elif self.direction == 'R':
+                self.rect.right = sprite.rect.left
+            elif self.direction == 'L':
+                self.rect.left = sprite.rect.right
 
         self.image = self.direct_dict[self.direction]
         if self.cooldown > 0:
