@@ -9,7 +9,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode([WIDTH, HEIGHT])
-        self.bg = pygame.image.load('bg4.jpg')
+        self.bg = pygame.image.load('bg.jpg')
         pygame.display.set_caption('Platformer')
         # Создаем спрайт игрока
         self.player = Player(200, 200)
@@ -39,6 +39,22 @@ class Game:
                     for coord in map[key]:
                         if coord[0] == t.rect.x and coord[1] == t.rect.y:
                             map[key].pop(map[key].index(coord))
+
+    def collision_texture(self, map):
+        hits_textures = pygame.sprite.groupcollide(self.bullets_lst, self.texture_lst, False, False)
+        if hits_textures:
+            for hit_tex in hits_textures:
+                textcoords = [hits_textures[hit_tex][0].rect[0], hits_textures[hit_tex][0].rect[1]]
+                for k,v in map.items():
+                    if (isinstance(v,list) and textcoords in v) or textcoords == v:
+                        if k == 'cementf' or k == 'cementv' or k == 'cementh':
+                            pygame.sprite.groupcollide(self.bullets_lst, self.texture_lst, True, False)
+                            break
+                        elif k == 'tree' or k == 'water':
+                            pygame.sprite.groupcollide(self.bullets_lst, self.texture_lst, False, False)
+                        else:
+                            pygame.sprite.groupcollide(self.bullets_lst, self.texture_lst, True, True)
+    
 
     def load_map(self):
         with open('map.json', 'r') as f:
@@ -92,7 +108,7 @@ class Game:
             self.bullets_lst.update()
             self.sprite_list.update()
             self.texture_lst.update()
-            pygame.sprite.groupcollide(self.bullets_lst, self.texture_lst, True, True)
+            self.collision_texture(map)
             pygame.display.flip()
             self.clock.tick(FPS)
         pygame.quit()

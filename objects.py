@@ -56,19 +56,23 @@ class Player(pygame.sprite.Sprite):
     def go_left(self):
         """ Вызывается, когда пользователь нажимает стрелку влево. """
         self.change_x -= 6
+        self.change_y = 0
         self.direction = "L"
 
     def go_right(self):
         """ Вызывается, когда пользователь нажимает стрелку вправо. """
         self.change_x += 6
+        self.change_y = 0
         self.direction = "R"
 
     def go_up(self):
         self.change_y -= 6
+        self.change_x = 0
         self.direction = 'U'
 
     def go_down(self):
         self.change_y += 6
+        self.change_x = 0
         self.direction = 'D'
 
     def stop(self):
@@ -129,7 +133,8 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x += self.change_x
         self.rect.y += self.change_y
         if not (0 < self.rect.x < WIDTH and 0 < self.rect.y < HEIGHT):
-            self.kill()
+            # self.kill()
+            pass
 
 
 
