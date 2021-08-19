@@ -41,19 +41,21 @@ class Game:
                             map[key].pop(map[key].index(coord))
 
     def collision_texture(self, map):
-        hits_textures = pygame.sprite.groupcollide(self.bullets_lst, self.texture_lst, False, False)
-        if hits_textures:
-            for hit_tex in hits_textures:
-                textcoords = [hits_textures[hit_tex][0].rect[0], hits_textures[hit_tex][0].rect[1]]
+        if len(self.bullets_lst) !=0:
+            hit_texture = pygame.sprite.spritecollideany(self.bullets_lst.sprites()[0], self.texture_lst)
+            if hit_texture:
+                textcoords = [hit_texture.rect[0], hit_texture.rect[1]]
                 for k,v in map.items():
                     if (isinstance(v,list) and textcoords in v) or textcoords == v:
                         if k == 'cementf' or k == 'cementv' or k == 'cementh':
-                            pygame.sprite.groupcollide(self.bullets_lst, self.texture_lst, True, False)
+                            self.bullets_lst.remove(self.bullets_lst.sprites()[0])
                             break
                         elif k == 'tree' or k == 'water':
-                            pygame.sprite.groupcollide(self.bullets_lst, self.texture_lst, False, False)
+                            break
                         else:
-                            pygame.sprite.groupcollide(self.bullets_lst, self.texture_lst, True, True)
+                            self.bullets_lst.remove(self.bullets_lst.sprites()[0])
+                            self.texture_lst.remove(hit_texture)
+                            break
     
 
     def load_map(self):

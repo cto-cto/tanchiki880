@@ -133,8 +133,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x += self.change_x
         self.rect.y += self.change_y
         if not (0 < self.rect.x < WIDTH and 0 < self.rect.y < HEIGHT):
-            # self.kill()
-            pass
+            self.kill()
 
 
 
