@@ -26,8 +26,9 @@ class Game:
     def draw(self):
         self.screen.blit(self.bg, (0, 0))
         self.sprite_list.draw(self.screen)
-        self.texture_lst.draw(self.screen)
         self.bullets_lst.draw(self.screen)
+        self.texture_lst.draw(self.screen)
+        
 
     def delete_texture(self, map):
         for t in self.texture_lst.sprites():
@@ -50,7 +51,10 @@ class Game:
                         if k == 'cementf' or k == 'cementv' or k == 'cementh':
                             self.bullets_lst.remove(self.bullets_lst.sprites()[0])
                             break
-                        elif k == 'tree' or k == 'water':
+                        elif k == 'tree':
+                            break
+                        elif k == 'water':
+                            self.bullets_lst.draw(self.screen)
                             break
                         else:
                             self.bullets_lst.remove(self.bullets_lst.sprites()[0])

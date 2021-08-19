@@ -4,6 +4,4 @@ for k,v in a_dict.items():
     if (isinstance(v,list) and to_found in v) or to_found==v:
         print(k)
         break
-    else:
-        print(f'Cant find value {to_found}')
 
